@@ -85,13 +85,13 @@ def main():
 				run = False
 
 		key = pygame.key.get_pressed()
-		if key[pygame.K_a] or key[pygame.K_LEFT]: # "a" or "left" being pressed, move the ship left
+		if (key[pygame.K_a] or key[pygame.K_LEFT]) and (ship.x - ship_velocity >= 0): # "a" or "left" being pressed, move the ship left
 			ship.x = ship.x - ship_velocity
-		if key[pygame.K_d] or key[pygame.K_RIGHT]: # "d" or "right" being pressed, move the ship right
+		if (key[pygame.K_d] or key[pygame.K_RIGHT]) and (ship.x + 50 + ship_velocity <= width): # "d" or "right" being pressed, move the ship right
 			ship.x = ship.x + ship_velocity
-		if key[pygame.K_w] or key[pygame.K_UP]: # "w" or "up" being pressed, move the ship up
+		if (key[pygame.K_w] or key[pygame.K_UP]) and (ship.y - ship_velocity >= 0): # "w" or "up" being pressed, move the ship up
 			ship.y = ship.y - ship_velocity
-		if key[pygame.K_s] or key[pygame.K_DOWN]: # "s" or "down" being pressed, move the ship down
+		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (ship.y + 50 + ship_velocity <= height): # "s" or "down" being pressed, move the ship down
 			ship.y = ship.y + ship_velocity
 
 
