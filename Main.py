@@ -70,6 +70,7 @@ class Enemy(Ship):
 
 def main():
 	run = True # Decides whether the proceed the game
+	lost = False
 	FPS = 60 # Frame-Per-Second, the rate of the game to be running
 	level = 0 # Indicates the current game level
 	lives = 5 # Indicates the number of lives remaining
@@ -82,7 +83,7 @@ def main():
 
 
 	game_font = pygame.font.SysFont("comicsans", 50) # This specifies the font and size of the text label in the game
-
+	lost_font = pygame.font.SysFont("comicsans", 70)
 
 	player = Player(0.45*width, 0.6*height)
 
@@ -102,6 +103,10 @@ def main():
 
 		player.draw(WINDOW)
 
+		if lost:
+			lost_label = lost_font.render("You Have Lost!", 1, (255,255,255))
+			WINDOW.blit(lost_label, (width/2 - lost_label.get_width()/2, height/2 - lost_label.get_height()/2))
+
 		for enemy in enemies:
 			  enemy.draw(WINDOW)
 
@@ -111,6 +116,9 @@ def main():
 
 	while run:
 		clock.tick(FPS) # Tick the clock with the rate specified by "FPS"
+
+		if lives <= 0 or player.health <= 0:
+			lost = True
 
 		if len(enemies) == 0:
 			level = level + 1
