@@ -37,8 +37,16 @@ class Ship:
 		self.lasers = []
 		self.cool_down_counter = 0
 
-	def draw(self, window):
-		pygame.draw.rect(window, (255,0,0), (self.x, self.y, 50, 50), 2)
+	def draw(self, WINDOW):
+		WINDOW.blit(self.ship_image, (self.x, self.y))
+
+class Player(Ship):
+	def __init__(self, x, y, health=100):
+		super().__init__(x, y, health)
+		self.ship_image = player_ship
+		self.laser_image = yellow_laser
+		self.mask = pygame.mask.from_surface(self.ship_image)
+		self.max_health = health
 
 
 
@@ -48,12 +56,12 @@ def main():
 	FPS = 60 # Frame-Per-Second, the rate of the game to be running
 	level = 1 # Indicates the current game level
 	lives = 5 # Indicates the number of lives remaining
-	ship_velocity = 5
+	player_velocity = 5
 
 	game_font = pygame.font.SysFont("comicsans", 50) # This specifies the font and size of the text label in the game
 
 
-	ship = Ship(300, 650)
+	player = Player(0.45*width, 0.6*height)
 
 
 
@@ -69,7 +77,7 @@ def main():
 		WINDOW.blit(lives_label, (width - level_label.get_width() - 10, 10))
 
 
-		ship.draw(WINDOW)
+		player.draw(WINDOW)
 
 
 		pygame.display.update()
@@ -85,14 +93,14 @@ def main():
 				run = False
 
 		key = pygame.key.get_pressed()
-		if (key[pygame.K_a] or key[pygame.K_LEFT]) and (ship.x - ship_velocity >= 0): # "a" or "left" being pressed, move the ship left
-			ship.x = ship.x - ship_velocity
-		if (key[pygame.K_d] or key[pygame.K_RIGHT]) and (ship.x + 50 + ship_velocity <= width): # "d" or "right" being pressed, move the ship right
-			ship.x = ship.x + ship_velocity
-		if (key[pygame.K_w] or key[pygame.K_UP]) and (ship.y - ship_velocity >= 0): # "w" or "up" being pressed, move the ship up
-			ship.y = ship.y - ship_velocity
-		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (ship.y + 50 + ship_velocity <= height): # "s" or "down" being pressed, move the ship down
-			ship.y = ship.y + ship_velocity
+		if (key[pygame.K_a] or key[pygame.K_LEFT]) and (player.x - player_velocity >= 0): # "a" or "left" being pressed, move the ship left
+			player.x = player.x - player_velocity
+		if (key[pygame.K_d] or key[pygame.K_RIGHT]) and (player.x + 50 + player_velocity <= width): # "d" or "right" being pressed, move the ship right
+			player.x = player.x + player_velocity
+		if (key[pygame.K_w] or key[pygame.K_UP]) and (player.y - player_velocity >= 0): # "w" or "up" being pressed, move the ship up
+			player.y = player.y - player_velocity
+		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (player.y + 50 + player_velocity <= height): # "s" or "down" being pressed, move the ship down
+			player.y = player.y + player_velocity
 
 
 
