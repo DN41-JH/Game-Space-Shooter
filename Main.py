@@ -48,6 +48,8 @@ def main():
 	FPS = 60 # Frame-Per-Second, the rate of the game to be running
 	level = 1 # Indicates the current game level
 	lives = 5 # Indicates the number of lives remaining
+	ship_velocity = 5
+
 	game_font = pygame.font.SysFont("comicsans", 50) # This specifies the font and size of the text label in the game
 
 
@@ -81,5 +83,19 @@ def main():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:  ### This is the way to stop and quit the game
 				run = False
+
+		key = pygame.key.get_pressed()
+		if key[pygame.K_a] or key[pygame.K_LEFT]: # "a" or "left" being pressed, move the ship left
+			ship.x = ship.x - ship_velocity
+		if key[pygame.K_d] or key[pygame.K_RIGHT]: # "d" or "right" being pressed, move the ship right
+			ship.x = ship.x + ship_velocity
+		if key[pygame.K_w] or key[pygame.K_UP]: # "w" or "up" being pressed, move the ship up
+			ship.y = ship.y - ship_velocity
+		if key[pygame.K_s] or key[pygame.K_DOWN]: # "s" or "down" being pressed, move the ship down
+			ship.y = ship.y + ship_velocity
+
+
+
+
 
 main()
