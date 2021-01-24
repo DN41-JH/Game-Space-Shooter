@@ -64,8 +64,8 @@ class Enemy(Ship):
 		self.ship_image, self.laser_image = self.color_map[color]
 		self.mask = pygame.mask.from_surface(self.ship_image)
 
-	def move(self, velocity):
-		self.y = self.y + velocity
+	#def move(self, velocity):
+	#	self.y = self.y + velocity
 
 
 def main():
@@ -76,7 +76,7 @@ def main():
 
 	enemies = []
 	wave_length = 5
-	enemy_velocity = 2
+	enemy_velocity = 1
 
 	player_velocity = 5
 
@@ -134,8 +134,12 @@ def main():
 		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (player.y + player.get_height() + player_velocity <= height): # "s" or "down" being pressed, move the ship down
 			player.y = player.y + player_velocity
 
-		for enemy in enemies:
-			enemy.move(enemy_velocity)
+		for enemy in enemies[:]:
+			#enemy.move(enemy_velocity)
+			enemy.y = enemy.y + enemy_velocity
+			if enemy.y + enemy.get_height() >= height:
+				lives = lives - 1
+				enemies.remove(enemy)
 
 		update_window()
 
