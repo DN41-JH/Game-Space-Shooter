@@ -36,7 +36,7 @@ class Laser:
 		WINDOW.blit(self.image, (self.x, self.y))
 
 	def move(self, velocity):
-		self.y = self.y - velocity
+		self.y = self.y + velocity
 
 	def off_screen(self, height):
 		return not(self.y <= height and self.y >=0)
@@ -110,9 +110,6 @@ class Player(Ship):
 					if laser.collision(object):
 						objects.remove(object)
 						self.lasers.remove(laser)
-
-
-
 
 class Enemy(Ship):
 	color_map = {"red": (red_ship, red_laser), 
@@ -217,20 +214,23 @@ def main():
 			player.y = player.y - player_velocity
 		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (player.y + player.get_height() + player_velocity <= height): # "s" or "down" being pressed, move the ship down
 			player.y = player.y + player_velocity
-
 		if key[pygame.K_SPACE]:
 			player.shoot()
-
 
 
 		for enemy in enemies[:]:
 			enemy.move(enemy_velocity)
 			enemy.move_lasers(laser_velocity, player)
+
+			if random.randrange(0, 4*FPS) == 1:
+				enemy.shoot()
+
+
 			if enemy.y + enemy.get_height() >= height:
 				lives = lives - 1
 				enemies.remove(enemy)
 
-		player.move_lasers(laser_velocity, enemies)
+		player.move_lasers(-laser_velocity, enemies)
 
 		update_window()
 
