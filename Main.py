@@ -5,25 +5,25 @@ import random
 pygame.font.init()
 
 # Below set up the gaming window
-width = 750
-height = 900
+width = 950
+height = 950
 WINDOW = pygame.display.set_mode((width, height)) # This specifies the width and height of the game window
 pygame.display.set_caption("Space Invader") # This specifies the caption of the game window
 
 # Below load the ship images
-red_ship = pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png"))
-blue_ship = pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png"))
-green_ship = pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png"))
-player_ship = pygame.image.load(os.path.join("assets", "pixel_ship_yellow.png"))
+white_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_white.png"))
+yellow_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_yellow.png"))
+blue_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_blue.png"))
+player_ship = pygame.image.load(os.path.join("assets", "Player_ship1.png"))
 
 # Below load the bullet images
-red_laser = pygame.image.load(os.path.join("assets", "pixel_laser_red.png"))
-green_laser = pygame.image.load(os.path.join("assets", "pixel_laser_green.png"))
-blue_laser = pygame.image.load(os.path.join("assets", "pixel_laser_blue.png"))
-yellow_laser = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"))
+red_laser = pygame.image.load(os.path.join("assets", "Laser_red.png"))
+green_laser = pygame.image.load(os.path.join("assets", "Laser_green.png"))
+blue_laser = pygame.image.load(os.path.join("assets", "Laser_blue.png"))
+yellow_laser = pygame.image.load(os.path.join("assets", "Laser_yellow.png"))
 
 # Below load the background image
-background_black = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (width, height))
+background = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background_universe.jpg")), (width, height))
 
 class Laser:
 	def __init__(self, x, y, image):
@@ -109,7 +109,8 @@ class Player(Ship):
 				for object in objects:
 					if laser.collision(object):
 						objects.remove(object)
-						self.lasers.remove(laser)
+						if laser in self.lasers:
+							self.lasers.remove(laser)
 
 	def draw(self, WINDOW):
 		super().draw(WINDOW)
@@ -120,11 +121,10 @@ class Player(Ship):
 		pygame.draw.rect(WINDOW, (0,255,0), (self.x, self.y + self.ship_image.get_height() + 10, self.ship_image.get_width()*(self.health/self.max_health), 15))
 
 
-
 class Enemy(Ship):
-	color_map = {"red": (red_ship, red_laser), 
-				"green": (green_ship, green_laser), 
-				"blue": (blue_ship, blue_laser)}
+	color_map = {"white": (white_ship, red_laser), 
+				"blue": (blue_ship, green_laser), 
+				"yellow": (yellow_ship, blue_laser)}
 
 	def __init__(self, x, y, color, health=100):
 		super().__init__(x, y, health)
@@ -136,7 +136,7 @@ class Enemy(Ship):
 
 	def shoot(self):
 		if self.cool_down_counter == 0:
-			laser = Laser(self.x - 20, self.y, self.laser_image)
+			laser = Laser(self.x, self.y, self.laser_image)
 			self.lasers.append(laser)
 			self.cool_down_counter = 1
 
@@ -176,7 +176,7 @@ def main():
 	clock = pygame.time.Clock()
 
 	def update_window():
-		WINDOW.blit(background_black, (0,0)) # Took the background_black image, and draw it at coordinate (0,0) on the game WINDOW
+		WINDOW.blit(background, (0,0)) # Took the background image, and draw it at coordinate (0,0) on the game WINDOW
 		
 		# Below update and draw the text labels on the game window:
 		level_label = game_font.render("Level: " + str(level), 1, (255,0,0)) # Update the text level label on the game window
@@ -213,7 +213,7 @@ def main():
 			level = level + 1
 			wave_length = wave_length + 5
 			for i in range(wave_length):
-				enemy = Enemy(random.randrange(50, width-100), random.randrange(-1500, -100), random.choice(["red","blue","green"]))
+				enemy = Enemy(random.randrange(50, width-100), random.randrange(-1500, -100), random.choice(["white","yellow","blue"]))
 				enemies.append(enemy)
 
 
@@ -257,7 +257,7 @@ def main_menu():
 	run = True
 
 	while run:
-		WINDOW.blit(background_black, (0,0))
+		WINDOW.blit(background, (0,0))
 		title_label = title_font.render("Press the mouse to begin", 1, (255,255,255))
 		WINDOW.blit(title_label, (width/2 - title_label.get_width()/2, height/2))
 		pygame.display.update()
