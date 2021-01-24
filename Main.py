@@ -46,7 +46,7 @@ class Laser:
 
 
 class Ship:
-	CoolDown = 30
+	CoolDown = 10
 
 	def __init__(self, x, y, health=100):
 		self.x = x
@@ -169,7 +169,7 @@ def main():
 	game_font = pygame.font.SysFont("comicsans", 50) # This specifies the font and size of the text label in the game
 	lost_font = pygame.font.SysFont("comicsans", 70)
 
-	player = Player(0.45*width, 0.6*height)
+	player = Player(0.45*width, 0.85*height)
 
 
 
@@ -248,11 +248,25 @@ def main():
 				lives = lives - 1
 				enemies.remove(enemy)
 
-
-
 		player.move_lasers(-laser_velocity, enemies)
 
 		update_window()
 
+def main_menu():
+	title_font = pygame.font.SysFont("comicsans", 70)
+	run = True
 
-main()
+	while run:
+		WINDOW.blit(background_black, (0,0))
+		title_label = title_font.render("Press the mouse to begin", 1, (255,255,255))
+		WINDOW.blit(title_label, (width/2 - title_label.get_width()/2, height/2))
+		pygame.display.update()
+
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				run = False
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				main()
+
+
+main_menu()
