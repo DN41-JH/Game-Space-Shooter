@@ -40,6 +40,12 @@ class Ship:
 	def draw(self, WINDOW):
 		WINDOW.blit(self.ship_image, (self.x, self.y))
 
+	def get_height(self):
+		return self.ship_image.get_height()
+
+	def get_width(self):
+		return self.ship_image.get_width()
+
 class Player(Ship):
 	def __init__(self, x, y, health=100):
 		super().__init__(x, y, health)
@@ -48,15 +54,32 @@ class Player(Ship):
 		self.mask = pygame.mask.from_surface(self.ship_image)
 		self.max_health = health
 
+class Enemy(Ship):
+	color_map = {"red": (red_ship, red_laser), 
+				"green": (green_ship, green_laser), 
+				"blue": (blue_ship, blue_laser)}
 
+	def __init__(self, x, y, color, health=100):
+		super().__init__(x, y, health)
+		self.ship_image, self.laser_image = self.color_map[color]
+		self.mask = pygame.mask.from_surface(self.ship_image)
+
+	def move(self, velocity):
+		self.y = self.y + velocity
 
 
 def main():
 	run = True # Decides whether the proceed the game
 	FPS = 60 # Frame-Per-Second, the rate of the game to be running
-	level = 1 # Indicates the current game level
+	level = 0 # Indicates the current game level
 	lives = 5 # Indicates the number of lives remaining
+
+	enemies = []
+	wave_length = 5
+	enemy_velocity = 2
+
 	player_velocity = 5
+
 
 	game_font = pygame.font.SysFont("comicsans", 50) # This specifies the font and size of the text label in the game
 
@@ -79,13 +102,22 @@ def main():
 
 		player.draw(WINDOW)
 
+		for enemy in enemies:
+			  enemy.draw(WINDOW)
+
 
 		pygame.display.update()
 
 
 	while run:
 		clock.tick(FPS) # Tick the clock with the rate specified by "FPS"
-		update_window()
+
+		if len(enemies) == 0:
+			level = level + 1
+			wave_length = wave_length + 5
+			for i in range(wave_length):
+				enemy = Enemy(random.randrange(50, width-100), random.randrange(-1500, -100), random.choice(["red","blue","green"]))
+				enemies.append(enemy)
 
 
 		for event in pygame.event.get():
@@ -95,15 +127,17 @@ def main():
 		key = pygame.key.get_pressed()
 		if (key[pygame.K_a] or key[pygame.K_LEFT]) and (player.x - player_velocity >= 0): # "a" or "left" being pressed, move the ship left
 			player.x = player.x - player_velocity
-		if (key[pygame.K_d] or key[pygame.K_RIGHT]) and (player.x + 50 + player_velocity <= width): # "d" or "right" being pressed, move the ship right
+		if (key[pygame.K_d] or key[pygame.K_RIGHT]) and (player.x + player.get_width() + player_velocity <= width): # "d" or "right" being pressed, move the ship right
 			player.x = player.x + player_velocity
 		if (key[pygame.K_w] or key[pygame.K_UP]) and (player.y - player_velocity >= 0): # "w" or "up" being pressed, move the ship up
 			player.y = player.y - player_velocity
-		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (player.y + 50 + player_velocity <= height): # "s" or "down" being pressed, move the ship down
+		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (player.y + player.get_height() + player_velocity <= height): # "s" or "down" being pressed, move the ship down
 			player.y = player.y + player_velocity
 
+		for enemy in enemies:
+			enemy.move(enemy_velocity)
 
-
+		update_window()
 
 
 main()
