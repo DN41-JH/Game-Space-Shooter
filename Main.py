@@ -11,19 +11,19 @@ WINDOW = pygame.display.set_mode((width, height)) # This specifies the width and
 pygame.display.set_caption("Sky Protector") # This specifies the caption of the game window
 
 # Below load the ship images
-white_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_white.png"))
-yellow_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_yellow.png"))
-blue_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_blue.png"))
-player_ship = pygame.image.load(os.path.join("assets", "Player_ship1.png"))
+white_ship = pygame.image.load(os.path.join("Images", "Enemy_ship_white.png"))
+yellow_ship = pygame.image.load(os.path.join("Images", "Enemy_ship_yellow.png"))
+blue_ship = pygame.image.load(os.path.join("Images", "Enemy_ship_blue.png"))
+player_ship = pygame.image.load(os.path.join("Images", "Player_ship1.png"))
 
 # Below load the laser bullet images
-red_laser = pygame.image.load(os.path.join("assets", "Laser_red.png"))
-green_laser = pygame.image.load(os.path.join("assets", "Laser_green.png"))
-blue_laser = pygame.image.load(os.path.join("assets", "Laser_blue.png"))
-player_laser = pygame.image.load(os.path.join("assets", "Laser_player.png"))
+red_laser = pygame.image.load(os.path.join("Images", "Laser_red.png"))
+green_laser = pygame.image.load(os.path.join("Images", "Laser_green.png"))
+blue_laser = pygame.image.load(os.path.join("Images", "Laser_blue.png"))
+player_laser = pygame.image.load(os.path.join("Images", "Laser_player.png"))
 
 # Below load the background image
-background = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background_universe.jpg")), (width, height)) # Re-scale the size of the background into the size of the gaming window
+background = pygame.transform.scale(pygame.image.load(os.path.join("Images", "background_universe.jpg")), (width, height)) # Re-scale the size of the background into the size of the gaming window
 
 class Laser:
 	def __init__(self, x, y, image): # Define the property of the Laser class
