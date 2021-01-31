@@ -5,9 +5,9 @@ import random
 pygame.font.init()
 
 # Below set up the gaming window
-width = 950
-height = 950
-WINDOW = pygame.display.set_mode((width, height)) # This specifies the width and height of the game window
+WIDTH = 950
+HEIGHT = 950
+WINDOW = pygame.display.set_mode((WIDTH, HEIGHT)) # This specifies the WIDTH and HEIGHT of the game window
 pygame.display.set_caption("Sky Protector") # This specifies the caption of the game window
 
 # Below load the ship images
@@ -23,7 +23,7 @@ blue_laser = pygame.image.load(os.path.join("assets", "Laser_blue.png"))
 player_laser = pygame.image.load(os.path.join("assets", "Laser_player.png"))
 
 # Below load the background image
-background = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background_universe.jpg")), (width, height)) # Re-scale the size of the background into the size of the gaming window
+background = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background_universe.jpg")), (WIDTH, HEIGHT)) # Re-scale the size of the background into the size of the gaming window
 
 class Laser:
 	def __init__(self, x, y, image): # Define the property of the Laser class
@@ -38,8 +38,8 @@ class Laser:
 	def move(self, velocity): # Move method, aims to vertically move the laser on the game window
 		self.y = self.y + velocity
 
-	def off_screen(self, height): # Off_screen method, aims to detect whether the laser is outside of the game window
-		return not(self.y <= height and self.y >=0)
+	def off_screen(self, HEIGHT): # Off_screen method, aims to detect whether the laser is outside of the game window
+		return not(self.y <= HEIGHT and self.y >=0)
 
 	def collision(self, object): # Collision method, aims to detect whether the laser bullet hits other flights
 		return collide(object, self)
@@ -73,7 +73,7 @@ class Ship:
 		self.cool_down()
 		for laser in self.lasers:
 			laser.move(velocity)
-			if laser.off_screen(height):
+			if laser.off_screen(HEIGHT):
 				self.lasers.remove(laser)
 			elif laser.collision(object):
 				object.health = object.health - 10
@@ -84,10 +84,10 @@ class Ship:
 		for laser in self.lasers:
 			laser.draw(WINDOW)
 
-	def get_height(self): # aims to obtain the height value (piexel) of the ship image
+	def get_height(self): # aims to obtain the HEIGHT value (piexel) of the ship image
 		return self.ship_image.get_height()
 
-	def get_width(self): # aims to obtain the width value (pixel) of the ship image
+	def get_width(self): # aims to obtain the WIDTH value (pixel) of the ship image
 		return self.ship_image.get_width()
 
 class Player(Ship):
@@ -102,7 +102,7 @@ class Player(Ship):
 		self.cool_down()
 		for laser in self.lasers:
 			laser.move(velocity)
-			if laser.off_screen(height):
+			if laser.off_screen(HEIGHT):
 				self.lasers.remove(laser)
 			else:
 				for object in objects:
@@ -149,7 +149,7 @@ def main(): # This is the main game function. If wanting to start the game, call
 
 	run = True # Decides whether the proceed the game
 	lost = False # Set "lost" to False at the beginning, otherwise the game cannot start
-	restart = False
+	restart = False # Set "restart" command to False at the beginning
 	FPS = 60 # Frame-Per-Second, the rate of the game to be running
 	lost_wait_time = 3 # Specifies the length of the waiting time (in [second]) before the game restart after the player loses the game
 
@@ -171,7 +171,7 @@ def main(): # This is the main game function. If wanting to start the game, call
 	game_font = pygame.font.SysFont("comicsans", 50) # This specifies the font and size of the text label in the game
 	lost_font = pygame.font.SysFont("comicsans", 70)
 
-	player = Player(0.45*width, 0.85*height) # This specifies the initial position of the player ship at the moment when the game starts
+	player = Player(0.45*WIDTH, 0.85*HEIGHT) # This specifies the initial position of the player ship at the moment when the game starts
 
 	clock = pygame.time.Clock()
 
@@ -183,13 +183,13 @@ def main(): # This is the main game function. If wanting to start the game, call
 		level_label = game_font.render("Level: " + str(level), 1, (255,0,0)) # Update the text level label on the game window
 		lives_label = game_font.render("Lives: " + str(lives), 1, (0,255,0)) # Update the text lives label on the game window
 		WINDOW.blit(level_label, (10,10)) # Draw the level label on the game window
-		WINDOW.blit(lives_label, (width - level_label.get_width() - 10, 10)) # Draw the lives label
+		WINDOW.blit(lives_label, (WIDTH - level_label.get_width() - 10, 10)) # Draw the lives label
 
 		player.draw(WINDOW) # Draw the player ship on the window
 
 		if lost: # Condition triggered after the player lost the game
 			lost_label = lost_font.render("You Have Lost!", 1, (255,255,255))
-			WINDOW.blit(lost_label, (width/2 - lost_label.get_width()/2, height/2 - lost_label.get_height()/2))
+			WINDOW.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, HEIGHT/2 - lost_label.get_height()/2))
 
 		for enemy in enemies:
 			  enemy.draw(WINDOW) # Draw all the enemy ships on the game window
@@ -198,10 +198,10 @@ def main(): # This is the main game function. If wanting to start the game, call
 
 
 	while run:
-		clock.tick(FPS) # Tick the clock with the rate specified by "FPS"
-
 		if restart:
 			break
+
+		clock.tick(FPS) # Tick the clock with the rate specified by "FPS"
 
 		if lives <= 0 or player.health <= 0: # Check whether the player has lost or not
 			lost = True
@@ -215,7 +215,7 @@ def main(): # This is the main game function. If wanting to start the game, call
 			level = level + 1
 			enemy_wave_number = enemy_wave_number + 5
 			for i in range(enemy_wave_number):
-				enemy = Enemy(random.randrange(50, width-100), random.randrange(-1500, -100), random.choice(["white","yellow","blue"])) # Generate randomized enemy
+				enemy = Enemy(random.randrange(50, WIDTH-100), random.randrange(-1500, -100), random.choice(["white","yellow","blue"])) # Generate randomized enemy
 				enemies.append(enemy) # add newly generated enemy into enemy record
 
 
@@ -227,16 +227,16 @@ def main(): # This is the main game function. If wanting to start the game, call
 		key = pygame.key.get_pressed()
 		if (key[pygame.K_a] or key[pygame.K_LEFT]) and (player.x - player_velocity >= 0): # "a" or "left" being pressed, move the ship left
 			player.x = player.x - player_velocity
-		if (key[pygame.K_d] or key[pygame.K_RIGHT]) and (player.x + player.get_width() + player_velocity <= width): # "d" or "right" being pressed, move the ship right
+		if (key[pygame.K_d] or key[pygame.K_RIGHT]) and (player.x + player.get_width() + player_velocity <= WIDTH): # "d" or "right" being pressed, move the ship right
 			player.x = player.x + player_velocity
 		if (key[pygame.K_w] or key[pygame.K_UP]) and (player.y - player_velocity >= 0): # "w" or "up" being pressed, move the ship up
 			player.y = player.y - player_velocity
-		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (player.y + player.get_height() + player_velocity <= height): # "s" or "down" being pressed, move the ship down
+		if (key[pygame.K_s] or key[pygame.K_DOWN]) and (player.y + player.get_height() + player_velocity <= HEIGHT): # "s" or "down" being pressed, move the ship down
 			player.y = player.y + player_velocity
 		if key[pygame.K_SPACE]: # "Space" button being pressed, fire the laser bullet
 			player.shoot()
-		if key[pygame.K_p]:
-			restart = not restart
+		if key[pygame.K_r]:
+			restart = True
 
 
 		for enemy in enemies[:]: # Move each enemy and detects whether the laser bullet from each enemy goes beyond the window or hits the player ship
@@ -249,7 +249,7 @@ def main(): # This is the main game function. If wanting to start the game, call
 			if collide(enemy, player): # When the enemy ship collides with the player ship, deduct 10 health from the player ship and remove the enemy ship
 				player.health = player.health - 10
 				enemies.remove(enemy)
-			elif enemy.y + enemy.get_height() >= height: # When the enemy ship reaches the bottom of the game window, deduct 1 life from the player and remove the enemy ship
+			elif enemy.y + enemy.get_height() >= HEIGHT: # When the enemy ship reaches the bottom of the game window, deduct 1 life from the player and remove the enemy ship
 				lives = lives - 1
 				enemies.remove(enemy)
 
@@ -265,7 +265,7 @@ def main_menu(): # Define the main menu program
 	while run:
 		WINDOW.blit(background, (0,0))
 		title_label = title_font.render("Press the mouse to begin", 1, (255,255,255)) # Setup the title label before the game starts
-		WINDOW.blit(title_label, (width/2 - title_label.get_width()/2, height/2)) # Print the title game on the game window
+		WINDOW.blit(title_label, (WIDTH/2 - title_label.get_width()/2, HEIGHT/2)) # Print the title game on the game window
 		pygame.display.update()
 
 		for event in pygame.event.get():
