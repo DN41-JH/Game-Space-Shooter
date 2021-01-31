@@ -11,19 +11,19 @@ WINDOW = pygame.display.set_mode((width, height)) # This specifies the width and
 pygame.display.set_caption("Sky Protector") # This specifies the caption of the game window
 
 # Below load the ship images
-white_ship = pygame.image.load(os.path.join("Images", "Enemy_ship_white.png"))
-yellow_ship = pygame.image.load(os.path.join("Images", "Enemy_ship_yellow.png"))
-blue_ship = pygame.image.load(os.path.join("Images", "Enemy_ship_blue.png"))
-player_ship = pygame.image.load(os.path.join("Images", "Player_ship1.png"))
+white_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_white.png"))
+yellow_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_yellow.png"))
+blue_ship = pygame.image.load(os.path.join("assets", "Enemy_ship_blue.png"))
+player_ship = pygame.image.load(os.path.join("assets", "Player_ship1.png"))
 
 # Below load the laser bullet images
-red_laser = pygame.image.load(os.path.join("Images", "Laser_red.png"))
-green_laser = pygame.image.load(os.path.join("Images", "Laser_green.png"))
-blue_laser = pygame.image.load(os.path.join("Images", "Laser_blue.png"))
-player_laser = pygame.image.load(os.path.join("Images", "Laser_player.png"))
+red_laser = pygame.image.load(os.path.join("assets", "Laser_red.png"))
+green_laser = pygame.image.load(os.path.join("assets", "Laser_green.png"))
+blue_laser = pygame.image.load(os.path.join("assets", "Laser_blue.png"))
+player_laser = pygame.image.load(os.path.join("assets", "Laser_player.png"))
 
 # Below load the background image
-background = pygame.transform.scale(pygame.image.load(os.path.join("Images", "background_universe.jpg")), (width, height)) # Re-scale the size of the background into the size of the gaming window
+background = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background_universe.jpg")), (width, height)) # Re-scale the size of the background into the size of the gaming window
 
 class Laser:
 	def __init__(self, x, y, image): # Define the property of the Laser class
@@ -149,6 +149,7 @@ def main(): # This is the main game function. If wanting to start the game, call
 
 	run = True # Decides whether the proceed the game
 	lost = False # Set "lost" to False at the beginning, otherwise the game cannot start
+	restart = False
 	FPS = 60 # Frame-Per-Second, the rate of the game to be running
 	lost_wait_time = 3 # Specifies the length of the waiting time (in [second]) before the game restart after the player loses the game
 
@@ -159,13 +160,12 @@ def main(): # This is the main game function. If wanting to start the game, call
 	
 
 	enemies = []
-	enemy_wave_number = 5 # Initial number of enemies at the initial level of the game 
+	enemy_wave_number = 3 # Initial number of enemies at the initial level of the game 
 	enemy_shoot_period = 4 # Specifies the average time interval (in [second]) between consecutive enemy shooting
-	enemy_velocity = 3 # Velocity of the enemy ship
+	enemy_velocity = 2 # Velocity of the enemy ship
 	player_velocity = 8 # Velocity of the player ship
-	enemy_laser_velocity = 4 # Velocity of the enemy laser
+	enemy_laser_velocity = 3 # Velocity of the enemy laser
 	player_laser_velocity = -5 # Velocity of the player laser
-
 
 
 	game_font = pygame.font.SysFont("comicsans", 50) # This specifies the font and size of the text label in the game
@@ -200,6 +200,9 @@ def main(): # This is the main game function. If wanting to start the game, call
 	while run:
 		clock.tick(FPS) # Tick the clock with the rate specified by "FPS"
 
+		if restart:
+			break
+
 		if lives <= 0 or player.health <= 0: # Check whether the player has lost or not
 			lost = True
 			lost_time_counter = lost_time_counter + 1
@@ -232,6 +235,8 @@ def main(): # This is the main game function. If wanting to start the game, call
 			player.y = player.y + player_velocity
 		if key[pygame.K_SPACE]: # "Space" button being pressed, fire the laser bullet
 			player.shoot()
+		if key[pygame.K_p]:
+			restart = not restart
 
 
 		for enemy in enemies[:]: # Move each enemy and detects whether the laser bullet from each enemy goes beyond the window or hits the player ship
